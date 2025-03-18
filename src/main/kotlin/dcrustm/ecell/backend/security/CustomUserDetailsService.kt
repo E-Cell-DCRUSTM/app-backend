@@ -1,4 +1,6 @@
-import com.example.auth.repository.UserRepository
+package dcrustm.ecell.backend.security
+
+import dcrustm.ecell.backend.repository.UserRepository
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

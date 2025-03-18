@@ -1,4 +1,6 @@
-import javax.persistence.*
+package dcrustm.ecell.backend.model
+
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")

@@ -1,7 +1,9 @@
-import com.example.auth.model.Role
-import com.example.auth.model.User
-import com.example.auth.security.JwtUtils
-import com.example.auth.service.AuthService
+package dcrustm.ecell.backend.controller
+
+import dcrustm.ecell.backend.model.Role
+import dcrustm.ecell.backend.model.User
+import dcrustm.ecell.backend.security.JwtUtils
+import dcrustm.ecell.backend.service.AuthService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

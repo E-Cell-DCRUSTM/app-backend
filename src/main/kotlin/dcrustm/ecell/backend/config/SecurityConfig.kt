@@ -1,6 +1,8 @@
-import com.example.auth.security.CustomUserDetailsService
-import com.example.auth.security.JwtUtils
-import com.example.auth.security.JwtAuthenticationFilter
+package dcrustm.ecell.backend.config
+
+import dcrustm.ecell.backend.security.CustomUserDetailsService
+import dcrustm.ecell.backend.security.JwtAuthenticationFilter
+import dcrustm.ecell.backend.security.JwtUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -30,13 +32,19 @@ class SecurityConfig(
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf().disable()
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        http.authorizeRequests()
-            .antMatchers("/api/auth/**").permitAll()
-            .antMatchers("/api/admin/**").hasRole("ADMIN")
-            .anyRequest().authenticated()
-        http.addFilterBefore(JwtAuthenticationFilter(jwtUtils, customUserDetailsService), UsernamePasswordAuthenticationFilter::class.java)
+        http.csrf { it.disable() } // Disable CSRF for stateless JWT-based authentication
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } // Stateless session management
+            .authorizeHttpRequests { authz ->
+                authz
+                    .requestMatchers("/api/auth/**").permitAll() // Public endpoints for authentication
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin-only endpoints
+                    .anyRequest().authenticated() // All other requests require authentication
+            }
+            .addFilterBefore(
+                JwtAuthenticationFilter(jwtUtils, customUserDetailsService),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
         return http.build()
     }
+
 }

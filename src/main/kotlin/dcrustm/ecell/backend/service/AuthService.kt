@@ -1,5 +1,7 @@
-import com.example.auth.model.User
-import com.example.auth.repository.UserRepository
+package dcrustm.ecell.backend.service
+
+import dcrustm.ecell.backend.model.User
+import dcrustm.ecell.backend.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service

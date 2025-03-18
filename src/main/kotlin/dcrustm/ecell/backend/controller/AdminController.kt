@@ -1,5 +1,7 @@
-import com.example.auth.model.Role
-import com.example.auth.repository.UserRepository
+package dcrustm.ecell.backend.controller
+
+import dcrustm.ecell.backend.model.Role
+import dcrustm.ecell.backend.repository.UserRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
