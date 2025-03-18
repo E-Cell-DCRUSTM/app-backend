@@ -30,14 +30,18 @@ class ImageController(private val imageService: ImageService) {
     }
 
     // Endpoint to fetch all images
+    // GET endpoint to fetch all images
     @GetMapping
-    fun getAllImages(): List<ImageResponse> {
-        return imageService.getAllImages().map { image ->
+    fun getAllImages(): ResponseEntity<List<ImageResponse>> {
+        val images: List<Image> = imageService.getAllImages()
+        // Map each Image entity to an ImageResponse DTO
+        val response = images.map { image ->
             ImageResponse(
                 id = image.id,
                 fileName = image.fileName,
                 base64Data = Base64.getEncoder().encodeToString(image.data)
             )
         }
+        return ResponseEntity.ok(response)
     }
 }
