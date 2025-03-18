@@ -9,6 +9,9 @@ This document provides a summary of the implemented API endpoints in the Ecell S
 | `/api/auth/signin`                   | `POST`     | Handles both authentication and account creation via Google Sign-In. If the user does not exist, creates a new user with the default role `Member`. | Not required. This endpoint is public.      |
 | `/api/auth/refresh`                   | `POST`     | Accepts a valid refresh token and returns a new pair of access and refresh tokens with updated expiration times. | Not required. Uses the provided refresh token. |
 | `/api/admin/users/{userId}/role`      | `PUT`      | Allows an admin user to update a given user's role (e.g., changing from `Member` to `ADMIN` or `INDEPENDENT`). | Requires a valid JWT token with the `ADMIN` role. |
+| `/api/images`                         | `POST`     | Upload an image file. Stores it as a BLOB and returns a Base64 encoded string of the image. | Public (unless security is configured). |
+| `/api/images`                         | `GET`      | Retrieve all stored images, including their IDs, file names, and Base64 data. | Public (unless security is configured). |
+| `/api/users`                          | `GET`      | Retrieves all users without exposing sensitive data like passwords. | Can be restricted to ADMIN using role-based authorization. |
 
 ## Sample Request Bodies
 
@@ -35,34 +38,87 @@ This document provides a summary of the implemented API endpoints in the Ecell S
 }
 ```
 
-## Additional Endpoint Details
+## Image Endpoints
 
-### Authentication Endpoints (`/api/auth/`)
+### `POST /api/images`
+- **Description:**
+  - Allows clients to upload an image file using `multipart/form-data`.
+  - The image is stored in the database as a BLOB, and the response includes a Base64 encoded string of the image data.
+- **Request Details:**
+  - HTTP Method: `POST`
+  - Content-Type: `multipart/form-data`
+  - Body:
+    - `file` (Type: File) – attach the desired image file.
+- **Response (JSON):**
+```json
+{
+  "id": 1,
+  "fileName": "example.jpg",
+  "base64Data": "iVBORw0KGgoAAAANSUhEUgAA..."
+}
+```
+- **Authentication:** Public (unless secured otherwise).
 
-#### `/signin`
-- **Purpose:** Sign in or sign up users via Google Sign-In data.
-- **Notes:**
-  - Returns JWT tokens (`accessToken` and `refreshToken`).
-  - New users are auto-assigned the `Member` role.
+### `GET /api/images`
+- **Description:**
+  - Retrieves a list of all images stored in the database.
+  - Each image entry includes its unique ID, file name, and Base64 encoded image data.
+- **Request Details:**
+  - HTTP Method: `GET`
+  - URL: `http://localhost:8080/api/images`
+- **Response (JSON):**
+```json
+[
+  {
+    "id": 1,
+    "fileName": "example.jpg",
+    "base64Data": "iVBORw0KGgoAAAANSUhEUgAA..."
+  },
+  {
+    "id": 2,
+    "fileName": "anotherImage.png",
+    "base64Data": "R0lGODlhPQBEAPeoAJosM...."
+  }
+]
+```
+- **Authentication:** Public (unless secured otherwise).
 
-#### `/refresh`
-- **Purpose:** Used to refresh tokens before the access token expires.
-- **Notes:**
-  - Token expiration is enforced, so the system issues new tokens with each valid refresh call.
+## User Endpoints
 
-### Admin Endpoint (`/api/admin/`)
-
-#### User Role Update (`/users/{userId}/role`)
-- **Purpose:** Allows an administrator to change user roles.
-- **Notes:**
-  - Only users with the `ADMIN` role are permitted.
-  - This endpoint reinforces role-based authorization to protect sensitive operations.
+### `GET /api/users`
+- **Description:**
+  - Returns a list of all users present in the `auth_db`.
+  - The response maps the `User` entity to a `UserResponse` DTO so that sensitive data like passwords aren’t exposed.
+- **Request Details:**
+  - HTTP Method: `GET`
+  - URL: `http://localhost:8080/api/users`
+- **Response (JSON):**
+```json
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "MEMBER"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "role": "ADMIN"
+  }
+]
+```
+- **Authentication:** Can be restricted to `ADMIN` using `@PreAuthorize("hasRole('ADMIN')")`.
 
 ## Security Considerations
 
 ### JWT Authentication
 - The application uses a JWT filter that intercepts requests to validate the token.
 - Ensure that the `Authorization` header is included for any endpoints that require authentication.
+
+### JWT Expiration Settings
+- Modify token validity by adjusting configuration properties such as `jwt.expirationMs` and `jwt.refreshExpirationMs`.
 
 ### CSRF Disabled
 - With stateless JWT security, CSRF is disabled to simplify API client usage.
@@ -75,18 +131,21 @@ This document provides a summary of the implemented API endpoints in the Ecell S
 ## Development and Testing
 
 ### Testing with Postman
-- Use the above endpoints by sending JSON payloads and the appropriate headers.
-- For protected endpoints (like the admin endpoint), include the header:
-
+- **GET endpoints:**
+  - Set the URL and ensure headers are set to `Accept: application/json` if needed.
+- **POST endpoints (file uploads):**
+  - Select `multipart/form-data`, add the `file` key, and choose the file from your system.
+- **Secured endpoints:**
+  - Include the Authorization header with the JWT in the format:
   ```text
   Authorization: Bearer <access_token>
   ```
 
 ## Database
-- As part of integration testing, verify database changes (e.g., updated user roles or new user records) using a MySQL client:
-
+- Verify database changes (e.g., uploaded images or new user records) using a MySQL client:
   ```sql
   SELECT * FROM users;
+  SELECT * FROM images;
   ```
 
 ## Important Configuration Details
@@ -94,4 +153,5 @@ This document provides a summary of the implemented API endpoints in the Ecell S
   - Proper MySQL configuration, JDBC URL (e.g., pointing to `auth_db`), and Hibernate dialect properties.
   - Correct JWT secret key and expiration times.
 
-This document serves as a reference for the authentication, token refresh, and role-based authorization functions implemented in the Ecell Spring Boot backend.
+This document serves as a reference for the authentication, image handling, and role-based authorization functions implemented in the Ecell Spring Boot backend.
+
