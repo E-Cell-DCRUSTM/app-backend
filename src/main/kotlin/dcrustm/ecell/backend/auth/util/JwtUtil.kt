@@ -9,6 +9,8 @@ import java.util.*
 
 @Component
 class JwtUtil {
+
+    // TODO replace secretKey with environment variable in the production server.
     private val secretKey = "replaceThisSecretKeyWithAStrongKey" // Replace with your proper secret key
 
     // Generate access token with an 8-hour expiry
