@@ -26,7 +26,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
+	implementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
+
+	// validation dependencies
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+	implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
 
 	// MySQL driver.
 	implementation("mysql:mysql-connector-java:8.0.33")
@@ -36,6 +41,7 @@ dependencies {
 
 	// JWT library for token generation and validation.
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
