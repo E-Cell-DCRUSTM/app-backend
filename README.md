@@ -66,6 +66,27 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 }
 ```
 
+----
+
+### 3⃣ Fetch User Details
+- **Method:** `GET`
+- **URL:** `/api/users/fetch?email=john.doe@example.com`
+- **Authentication:** Public
+- **Description:** provides the details of a user by email.
+
+✅ **Success Response (200 OK):**
+```json
+{
+  "id": 0,
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "photoUrl": "http://dummyimage.com/john.jpg",
+  "role": "MEMBER",
+  "createdAt": "2025-03-19T16:14:46.877372"
+}
+```
+
 ---
 
 ### 3️⃣ Update User Role
