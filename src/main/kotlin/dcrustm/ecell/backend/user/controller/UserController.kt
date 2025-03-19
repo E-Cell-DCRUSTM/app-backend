@@ -4,9 +4,12 @@ import dcrustm.ecell.backend.auth.dto.TokenResponse
 import dcrustm.ecell.backend.auth.util.JwtUtil
 import dcrustm.ecell.backend.user.dto.CreateUserDTO
 import dcrustm.ecell.backend.user.dto.RoleUpdateRequest
+import dcrustm.ecell.backend.user.dto.UserResponseDTO
 import dcrustm.ecell.backend.user.dto.UserUpdateRequest
+import dcrustm.ecell.backend.user.entity.User
 import dcrustm.ecell.backend.user.service.UserService
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.security.access.prepost.PreAuthorize
@@ -30,6 +33,18 @@ class UserController(
     fun checkUserExists(@RequestParam email: String): ResponseEntity<Map<String, Boolean>> {
         val exists = userService.getUserByEmail(email) != null
         return ResponseEntity.ok(mapOf("exists" to exists))
+    }
+
+    @GetMapping("/fetch")
+    fun fetchUserDetails(
+        @RequestParam email: String
+    ): ResponseEntity<Any> {
+        val user = userService.getUserByEmail(email)
+        return if (user == null) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found")
+        } else {
+            ResponseEntity.ok(UserResponseDTO.from(user))
+        }
     }
 
     @PutMapping("/role")
