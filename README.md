@@ -18,7 +18,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ## 📂 API Endpoints
 
-### 1️⃣ Create User
+### 1. Create User
 - **Method:** `POST`
 - **URL:** `/api/users`
 - **Authentication:** Public
@@ -53,7 +53,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ---
 
-### 2️⃣ Check User Existence
+### 2. Check User Existence
 - **Method:** `GET`
 - **URL:** `/api/users/exists?email=john.doe@example.com`
 - **Authentication:** Public
@@ -68,7 +68,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ----
 
-### 3⃣ Fetch User Details
+### 3. Fetch User Details
 - **Method:** `GET`
 - **URL:** `/api/users/fetch?email=john.doe@example.com`
 - **Authentication:** Public
@@ -87,9 +87,36 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 }
 ```
 
+----
+
+### 4. Login user tokens
+- **Method:** `POST`
+- **URL:** `/api/users/login`
+- **Authentication:** Public
+- **Description:** provides the authentication tokens for a user.
+
+📌 **Request Body:**
+```json
+{
+  "email": "jane.doe@example.com"
+}
+```
+
+✅ **Success Response (200 OK):**
+```json
+{
+  "accessToken" : "sfdsf.xx",
+  "refreshToken" : "sfdsf.yy"
+}
+```
+
+❌ **Errors:**
+- `401/403` Unauthorized (Non-Superuser access)
+- `404` User not found
+
 ---
 
-### 3️⃣ Update User Role
+### 5. Update User Role
 - **Method:** `PUT`
 - **URL:** `/api/users/role`
 - **Authentication:** `SUPERUSER Only`
@@ -119,7 +146,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ---
 
-### 4️⃣ Update User Details
+### 6. Update User Details
 - **Method:** `PUT`
 - **URL:** `/api/users/update`
 - **Authentication:** Public (Should be secured later)
@@ -151,7 +178,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ---
 
-### 5️⃣ Delete User
+### 7. Delete User
 - **Method:** `DELETE`
 - **URL:** `/api/users?email=john.doe@example.com`
 - **Authentication:** `SUPERUSER Only`
@@ -164,7 +191,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ---
 
-### 6️⃣ Invalidate User Tokens
+### 8. Invalidate User Tokens
 - **Method:** `POST`
 - **URL:** `/api/auth/invalidate`
 - **Authentication:** `SUPERUSER Only`
@@ -188,7 +215,7 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ---
 
-### 7️⃣ Refresh Access Token
+### 9.  Refresh Access Token
 - **Method:** `POST`
 - **URL:** `/api/auth/refresh`
 - **Authentication:** Public
