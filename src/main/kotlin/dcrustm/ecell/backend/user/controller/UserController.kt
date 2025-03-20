@@ -54,8 +54,14 @@ class UserController(
             ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found")
 
         // Generate a new JWT token using the existing jwtUtil which already includes role claims
-        val token = jwtUtil.generateAccessToken(user)
-        return ResponseEntity.ok(mapOf("accessToken" to token))
+        val accessToken = jwtUtil.generateAccessToken(user)
+        val refreshToken = jwtUtil.generateRefreshToken(user)
+        return ResponseEntity.ok(
+            mapOf(
+                "accessToken" to accessToken,
+                "refreshToken" to refreshToken
+            )
+        )
     }
 
     @PutMapping("/role")
