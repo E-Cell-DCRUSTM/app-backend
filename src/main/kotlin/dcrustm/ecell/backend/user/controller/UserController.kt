@@ -1,5 +1,6 @@
 package dcrustm.ecell.backend.user.controller
 
+import dcrustm.ecell.backend.auth.dto.EmailLoginRequest
 import dcrustm.ecell.backend.auth.dto.TokenResponse
 import dcrustm.ecell.backend.auth.util.JwtUtil
 import dcrustm.ecell.backend.user.dto.CreateUserDTO
@@ -45,6 +46,16 @@ class UserController(
         } else {
             ResponseEntity.ok(UserResponseDTO.from(user))
         }
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: EmailLoginRequest): ResponseEntity<Any> {
+        val user = userService.getUserByEmail(loginRequest.email)
+            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found")
+
+        // Generate a new JWT token using the existing jwtUtil which already includes role claims
+        val token = jwtUtil.generateAccessToken(user)
+        return ResponseEntity.ok(mapOf("accessToken" to token))
     }
 
     @PutMapping("/role")
