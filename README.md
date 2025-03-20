@@ -89,32 +89,45 @@ Welcome to the **Ecell-Dcrustm Spring Boot Backend**! This project provides a ro
 
 ----
 
-### 4. Login user tokens
+### 4. Login Endpoint
 - **Method:** `POST`
-- **URL:** `/api/users/login`
+- **URL:** `/api/auth/login?provider={provider}`
 - **Authentication:** Public
-- **Description:** provides the authentication tokens for a user.
+- **Description:** Authenticates a user based on the provider type and returns tokens.
 
 📌 **Request Body:**
+Depending on the `provider` value, the request body must include:
+
+For `provider=google`:
 ```json
 {
-  "email": "jane.doe@example.com"
+  "email": "john.doe@example.com",
+  "oauthgoogle": "sample_google_token_value"
+}
+```
+
+For `provider=customEmail`:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "user_plain_text_password"
 }
 ```
 
 ✅ **Success Response (200 OK):**
 ```json
 {
-  "accessToken" : "sfdsf.xx",
-  "refreshToken" : "sfdsf.yy"
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxx",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.yyy"
 }
 ```
 
-❌ **Errors:**
-- `401/403` Unauthorized (Non-Superuser access)
-- `404` User not found
+❌ **Error Responses:**
+- `404 Not Found`: User not found.
+- `400 Bad Request`: Missing required fields or unsupported provider.
+- `401 Unauthorized`: Invalid credentials.
 
----
+----
 
 ### 5. Update User Role
 - **Method:** `PUT`
