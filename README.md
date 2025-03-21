@@ -253,6 +253,95 @@ For `provider=customEmail`:
 
 ---
 
+### 10.  Upload image with caption text
+- **Method:** `POST`
+- **URL:** `/api/images/upload`
+- **Authentication:** `ADMIN` or `SUPERUSER`
+- **Bearer Token:** `AUTHORIZATION: BEARER jdshfdlsjfljdlfj.YYY`    
+- **Headers:** `Content-Type: multipart/form-data`    
+
+
+📌 **Request Body:**
+```bash
+form-data
+
+Key: file (type: File) - Choose an image file (ensure the file is under 10MB.)
+Key: caption (type: Text) - Enter your caption text, e.g. "Shiven Saini's picture".
+
+
+```
+
+✅ **Success Response (200 OK):**
+````json
+{
+"id": 1,
+"fileName": "1679324567890-7b2f3d1e-abc1-4e3f-9d2f-1234567890ab.jpg",
+"caption": "Shiven Saini's picture",
+"creationTime": "2025-03-19T16:14:46.877372",
+"imageUrl": "http://192.168.69.65:8080/images/1679324567890-7b2f3d1e-abc1-4e3f-9d2f-1234567890ab.jpg"
+}
+````
+
+❌ **Errors:**
+- `403` Unauthorized access or Forbidden
+- 
+---
+
+### 11.  Fetch all the stored images along with a public URL.
+- **Method:** `GET`
+- **URL:** `/api/images`
+- **Authentication:** `No Authentication Required`
+- **Headers:** `Content-Type: application/json`
+- **Request Body:** `No need as such`
+
+
+✅ **Success Response (200 OK):** An array of stored images.
+````json
+[
+  {
+    "id": 1,
+    "fileName": "1742546818523-3276872b-68f6-475d-8b57-781564a80e4f.png",
+    "caption": "Shiven Saini's picture",
+    "creationTime": "2025-03-21T14:16:58.528595",
+    "imageUrl": "http://localhost:8080/images/1742546818523-3276872b-68f6-475d-8b57-781564a80e4f.png"
+  }
+]
+````
+
+❌ **Errors:**
+- `403`: Forbidden or Improper Request
+---
+
+### 12.  Fetch all the images stored after a certain timestamp.
+- **Method:** `GET`
+- **URL:** `/api/images`
+- **Query Param:** `?after=ISO-8601 Formatted Value`
+- **Authentication:** `No Authentication Required`
+- **Headers:** `Content-Type: application/json`
+- **Request Body:** `No need as such`
+
+
+✅ **Success Response (200 OK):** An array of images stored after specified timestamp. 
+````json
+[
+  {
+    "id": 1,
+    "fileName": "1742546818523-3276872b-68f6-475d-8b57-781564a80e4f.png",
+    "caption": "Shiven Saini's picture",
+    "creationTime": "2025-03-21T14:16:58.528595",
+    "imageUrl": "http://localhost:8080/images/1742546818523-3276872b-68f6-475d-8b57-781564a80e4f.png"
+  }
+]
+````
+
+❌ **Errors:**
+- `403`: Forbidden or Improper Request
+---
+
+
+
+
+
 ## 🔐 Authentication & Security
 - 🔑 JWT Tokens (Access Token: 8 hours, Refresh Token: 7 days)
 - 🔒 **@PreAuthorize** annotations enforce role-based restrictions
