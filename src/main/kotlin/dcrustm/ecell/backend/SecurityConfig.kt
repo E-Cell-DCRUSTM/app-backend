@@ -22,7 +22,14 @@ class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/users", "/api/users/exists", "/api/users/login", "/api/auth/refresh", "/api/users/fetch").permitAll() // Allow public access to user creation
+                auth.requestMatchers(
+                    "/images/**",
+                    "/api/users",
+                    "/api/users/exists",
+                    "/api/users/login",
+                    "/api/auth/refresh",
+                    "/api/users/fetch"
+                ).permitAll() // Allow public access to user creation
                     .anyRequest().authenticated() // Require authentication for all other endpoints
             }
         // Custom JWT filter before the default UsernamePasswordAuthenticationFilter.
