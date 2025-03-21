@@ -24,6 +24,7 @@ class SecurityConfig {
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers(
                     "/images/**",
+                    "/api/images",
                     "/api/users",
                     "/api/users/exists",
                     "/api/users/login",
